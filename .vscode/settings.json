@@ -1,0 +1,10 @@
+{
+    "editor.renderWhitespace": "all",
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+    "tslint.configFile": "./tslint.json",
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true
+    },
+}

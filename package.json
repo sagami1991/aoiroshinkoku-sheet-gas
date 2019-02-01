@@ -1,0 +1,35 @@
+{
+  "name": "google_apps_script_playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --watch --mode development",
+    "push": "clasp push",
+    "push:watch:win": "watch \"npm run push\" dist/",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.0.0",
+    "@types/google-apps-script": "0.0.35",
+    "@types/jest": "^23.3.13",
+    "@types/lodash": "^4.14.120",
+    "es3ify-webpack-plugin": "^0.1.0",
+    "gas-webpack-plugin": "^1.0.2",
+    "jest": "^24.0.0",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4",
+    "watch": "^1.0.2",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1"
+  }
+}
