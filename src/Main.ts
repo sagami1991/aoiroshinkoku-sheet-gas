@@ -3,19 +3,24 @@ import { ShiwakeSheet, IShiwakeRepository } from "sheet/ShiwakeSheet";
 import { KamokuSheet } from "sheet/KamokuSheet";
 import { SoukanjoSheet, ISoukanjoSheet } from "sheet/SoukanjoSheet";
 import { CommonUtils } from "CommonUtil";
-import { ShisanSheet } from "sheet/ShisanSheet";
+import { ShisanSheet, KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/ShisanSheet";
 
 global.main = () => {
     const shiwakeSheet = new ShiwakeSheet();
     const kamokuSheet = new KamokuSheet();
     const soukanjoSheet = new SoukanjoSheet();
     const shisanSheet = new ShisanSheet();
+    const kashiKariTaishoSheet = new KashiKariTaishoSheet();
+    const sonekiKeisanSheet = new SonekiKeisanSheet();
+
     const app = new Calculator(shiwakeSheet, kamokuSheet);
     const soukanjoRecords = app.calcSoukanjomotocho();
     const shisanRecords = app.calcShisan(soukanjoRecords);
+
     soukanjoSheet.insertRecords(soukanjoRecords);
     shisanSheet.insertRecords(shisanRecords);
-
+    kashiKariTaishoSheet.insertRecords(app.calcKessan(shisanRecords, "貸借対照表"));
+    sonekiKeisanSheet.insertRecords(app.calcKessan(shisanRecords, "損益計算書"));
 };
 
 export class Calculator {
@@ -25,7 +30,7 @@ export class Calculator {
     ) {
     }
 
-    /** 総勘定元帳 */
+    /** 総勘定元帳のレコード作成 */
     public calcSoukanjomotocho() {
         const shiwakeRecords = this.shiwakeRepository.getRecords();
         const kamokuRecords = this.kamokuRepository.getRecords();
@@ -79,11 +84,6 @@ export class Calculator {
         return soukanjoRecords;
     }
 
-    /** 貸借対照表の作成 */
-    public calcKashiKariTaisho(soukanjoRecords: ISoukanjo[]) {
-        const kamokuRecords = this.kamokuRepository.getRecords();
-    }
-
     /** 試算表の作成 */
     public calcShisan(soukanjoRecords: ISoukanjo[]) {
         const shisanMap: {[kamokuName: string]: IShisan} = {};
@@ -119,5 +119,13 @@ export class Calculator {
             keyName: "order", type: "ASC"
         }]);
         return shisanRecords;
+    }
+
+    /** 貸借対照表 or 損益計算書のレコード作成 */
+    public calcKessan(shisanRecords: IShisan[], seisanType: "貸借対照表" | "損益計算書") {
+        const kamokuRecords = this.kamokuRepository.getRecords();
+        const kamokuMap = CommonUtils.arrayToMap(kamokuRecords, "name");
+        return shisanRecords.filter(shisan => kamokuMap[shisan.kamokuName].seisanType === seisanType);
+
     }
 }

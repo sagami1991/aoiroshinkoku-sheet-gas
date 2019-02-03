@@ -1,16 +1,16 @@
 import { ISoukanjo } from "interface";
+import { AbstractSheet } from "./AbstractSheet";
 
 export interface ISoukanjoSheet {
     insertRecords(soukanjoRecords: ISoukanjo[]): void;
 }
 
 /** 総勘定元帳シートへの書き込みを行う */
-export class SoukanjoSheet implements ISoukanjoSheet {
-    private sheet: GoogleAppsScript.Spreadsheet.Sheet;
+export class SoukanjoSheet extends AbstractSheet implements ISoukanjoSheet {
     private static START_ROW_NUM = 2;
-    constructor() {
-        const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-        this.sheet = spreadSheet.getSheetByName("総勘定元帳");
+
+    protected getSheetName() {
+        return "総勘定元帳";
     }
 
     public insertRecords(soukanjoRecords: ISoukanjo[]) {
@@ -23,7 +23,7 @@ export class SoukanjoSheet implements ISoukanjoSheet {
                 if (rows.length !== 0) {
                     rows.push(["", "", "", "", "", "", "", ""]); // 空行の追加
                 }
-                rows.push([`科目名: ${soukanjo.kamoku}`, "", "", "", "", "", "", ""]);
+                rows.push([`勘定科目名: ${soukanjo.kamoku}`, "", "", "", "", "", "", ""]);
                 rows.push(header);
             }
             const row = [
@@ -38,7 +38,7 @@ export class SoukanjoSheet implements ISoukanjoSheet {
             ];
             rows.push(row);
         }
-        this.sheet.clearContents();
+        this.sheet.getRange(SoukanjoSheet.START_ROW_NUM, 1, 1000, header.length).clearContent();
         const range = this.sheet.getRange(SoukanjoSheet.START_ROW_NUM, 1, rows.length, header.length);
         range.setValues(rows);
         console.log(`総勘定元帳シートに${soukanjoRecords.length}行書き込みました`);

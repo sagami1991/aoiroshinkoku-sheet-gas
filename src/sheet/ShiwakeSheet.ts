@@ -1,20 +1,21 @@
 import { IShiwake } from "interface";
+import { AbstractSheet } from "./AbstractSheet";
 export interface IShiwakeRepository {
     getRecords(): IShiwake[];
 }
 
 /** 仕訳帳シートへの読み込みを行う */
-export class ShiwakeSheet implements IShiwakeRepository {
-    private sheet: GoogleAppsScript.Spreadsheet.Sheet;
-    constructor() {
-        const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-        this.sheet = spreadSheet.getSheetByName("仕訳帳");
+export class ShiwakeSheet extends AbstractSheet implements IShiwakeRepository {
+
+    protected getSheetName() {
+        return "仕訳帳";
     }
 
     public getRecords() {
         const values = this.sheet.getRange("A:G").getValues();
         const shiwakeRecords: IShiwake[] = [];
-        values.shift(); // 1行目ヘッダ行スキップ
+        values.shift();
+        values.shift();
         for (const row of values) {
             if (row[0] === undefined || row[0] === null || row[0] === "") {
                 continue;
