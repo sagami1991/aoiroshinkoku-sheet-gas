@@ -10,20 +10,21 @@ export class ShiwakeRepository implements IShiwakeRepository {
     }
 
     public getRecords() {
-        const values = this.sheet.getRange("A:F").getValues();
+        const values = this.sheet.getRange("A:G").getValues();
         const shiwakeRecords: IShiwake[] = [];
-        values.shift();
+        values.shift(); // 1行目ヘッダ行スキップ
         for (const row of values) {
-            if (!row[0]) {
+            if (row[0] === undefined || row[0] === null) {
                 break;
             }
             const shiwake: IShiwake = {
-                date: row[0] as Date,
-                kariKamoku: row[1] as string,
-                kariPrice: row[2] as number,
-                kashiKamoku: row[3] as string,
-                kashiPrice: row[4] as number,
-                summary: row[5] as string
+                id: row[0] as number,
+                date: row[1] as Date,
+                kariKamoku: row[2] as string,
+                kariPrice: row[3] as number,
+                kashiKamoku: row[4] as string,
+                kashiPrice: row[5] as number,
+                summary: row[6] as string
             };
             shiwakeRecords.push(shiwake);
         }

@@ -1,4 +1,5 @@
 export interface IShiwake {
+    id: number;
     /** 日付 */
     date: Date;
     /** 借方科目 */
@@ -14,6 +15,8 @@ export interface IShiwake {
 }
 
 export interface ISoukanjo {
+    shiwakeId: number;
+    kamokuOrder: number;
     /** 日付 */
     date: Date;
     /** 勘定科目 */

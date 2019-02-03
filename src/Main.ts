@@ -31,9 +31,13 @@ export class Calculator {
         }
         let soukanjoRecords: ISoukanjo[] = [];
         for (const shiwake of shiwakeRecords) {
-            if (kamokuRecords.some(kamoku => kamoku.kamokuName === shiwake.kariKamoku)) {
-                zandaka[shiwake.kariKamoku] += shiwake.kariPrice;
+            const kariKamoku = CommonUtils.find(kamokuRecords, (kamoku) => kamoku.kamokuName === shiwake.kariKamoku);
+            if (kariKamoku !== undefined) {
+                const plusMinus = kariKamoku.kashikariType === "借方" ? 1 : -1;
+                zandaka[shiwake.kariKamoku] += shiwake.kariPrice * plusMinus;
                 soukanjoRecords.push({
+                    shiwakeId: shiwake.id,
+                    kamokuOrder: kariKamoku.outputOrder,
                     date: shiwake.date,
                     kamoku: shiwake.kariKamoku,
                     aiteKamoku: shiwake.kashiKamoku,
@@ -42,9 +46,14 @@ export class Calculator {
                     kashiPrice: 0,
                     zandaka: zandaka[shiwake.kariKamoku],
                 });
-            } else if (kamokuRecords.some(kamoku => kamoku.kamokuName === shiwake.kashiKamoku)) {
-                zandaka[shiwake.kashiKamoku] += shiwake.kashiPrice;
+            }
+            const kashiKamoku = CommonUtils.find(kamokuRecords, (kamoku) => kamoku.kamokuName === shiwake.kashiKamoku);
+            if (kashiKamoku !== undefined) {
+                const plusMinus = kashiKamoku.kashikariType === "貸方" ? 1 : -1;
+                zandaka[shiwake.kashiKamoku] += shiwake.kashiPrice * plusMinus;
                 soukanjoRecords.push({
+                    shiwakeId: shiwake.id,
+                    kamokuOrder: kashiKamoku.outputOrder,
                     date: shiwake.date,
                     kamoku: shiwake.kashiKamoku,
                     aiteKamoku: shiwake.kariKamoku,
@@ -55,8 +64,8 @@ export class Calculator {
                 });
             }
         }
-
         soukanjoRecords = CommonUtils.sortArray(soukanjoRecords, [
+            { keyName: "kamokuOrder", type: "ASC" },
             { keyName: "kamoku", type: "ASC" },
             { keyName: "date", type: "ASC" },
         ]);

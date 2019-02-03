@@ -12,8 +12,22 @@ export class SoukanjoRepository implements ISoukanjoRepository {
     }
 
     public insertRecords(soukanjoRecords: ISoukanjo[]) {
-        const rows = soukanjoRecords.map(soukanjo => {
-            return [
+        const header = ["仕訳帳ID", "日付", "勘定科目", "相手勘定科目", "摘要", "借方金額（円）", "貸方金額（円）", "残高（円）"];
+        let beforeKamokuName = "";
+        const rows: any[][] = [];
+        // const titleRowNumbers: number[] = [];
+        for (const soukanjo of soukanjoRecords) {
+            if (soukanjo.kamoku !== beforeKamokuName) {
+                beforeKamokuName = soukanjo.kamoku;
+                if (rows.length !== 0) {
+                    rows.push(["", "", "", "", "", "", "", ""]); // 空行の追加
+                }
+                rows.push([`科目名: ${soukanjo.kamoku}`, "", "", "", "", "", "", ""]);
+                // titleRowNumbers.push(rows.length);
+                rows.push(header);
+            }
+            const row = [
+                soukanjo.shiwakeId,
                 soukanjo.date,
                 soukanjo.kamoku,
                 soukanjo.aiteKamoku,
@@ -22,10 +36,15 @@ export class SoukanjoRepository implements ISoukanjoRepository {
                 soukanjo.kashiPrice,
                 soukanjo.zandaka
             ];
-        });
-        this.sheet.getRange("A2:G1000").clear();
-        this.sheet.insertRows(2, rows.length);
-        this.sheet.getRange(2, 1, rows.length, 7).setValues(rows);
+            rows.push(row);
+        }
+        this.sheet.clearContents();
+        this.sheet.insertRows(1, rows.length);
+        const range = this.sheet.getRange(1, 1, rows.length, header.length);
+        range.setValues(rows);
+        // for (const rowNumber of titleRowNumbers) {
+        //     this.sheet.getRange(rowNumber, 1).setFontSize(18);
+        //     this.sheet.getRange(rowNumber, 1).setFontWeight("bold");
+        // }
     }
-
 }

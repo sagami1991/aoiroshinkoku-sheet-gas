@@ -21,4 +21,13 @@ export class CommonUtils {
             return 0;
         });
     }
+
+    /** TODO gas用のlodashを探す */
+    public static find<T>(array: T[], filter: (item: T) => boolean | void): T | undefined {
+        for (const item of array) {
+            if (filter(item)) {
+                return item;
+            }
+        }
+    }
 }
