@@ -1,34 +1,19 @@
 import { Calculator } from "Main";
-import { ShiwakeRepositoryMock } from "./repository/ShiwakeRepositoryMock";
-import { KamokuRepository } from "repository/KamokuRepository";
+import { ShiwakeSheetMock } from "./sheet/ShiwakeSheetMock";
+import { KamokuSheet } from "sheet/KamokuSheet";
 
-test("basic", () => {
-    const app = new Calculator(
-        new ShiwakeRepositoryMock(),
-        new KamokuRepository(),
-        { insertRecords: () => {} }
-    );
-    const soukanjoRecords = app.calcSoukanjomotocho();
-    soukanjoRecords.forEach(soukanjo => {
-        console.log(soukanjo);
-    });
+const testCalculator = new Calculator(
+    new ShiwakeSheetMock(),
+    new KamokuSheet()
+);
+test("総勘定元帳テスト", () => {
+    const soukanjoRecords = testCalculator.calcSoukanjomotocho();
     expect(0).toBe(0);
 });
 
-// test("basic2", () => {
-//     const shiwakeRepositoryMock = new ShiwakeRepositoryMock();
-//     const app = new Calculator(
-//         new ShiwakeRepositoryMock(),
-//         new KamokuRepository(),
-//         { insertRecords: () => {} }
-//     );
-//     const shiwakeRecords = shiwakeRepositoryMock.getRecords();
-//     const kamoku: { [key: string]: true} = {};
-//     shiwakeRecords.forEach(shiwake => {
-//         kamoku[shiwake.kariKamoku] = true;
-//         kamoku[shiwake.kashiKamoku] = true;
-//     });
-
-//     console.log(Object.keys(kamoku));
-//     expect(0).toBe(0);
-// });
+test("試算表テスト", () => {
+    const soukanjoRecords = testCalculator.calcSoukanjomotocho();
+    const shisanRecords = testCalculator.calcShisan(soukanjoRecords);
+    console.log(shisanRecords);
+    expect(0).toBe(0);
+});

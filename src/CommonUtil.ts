@@ -30,4 +30,16 @@ export class CommonUtils {
             }
         }
     }
+
+    public static arrayToMap<T>(array: T[], key: keyof T) {
+        const map: {[key: string]: T} = {};
+        array.forEach(item => {
+            map[item[key] as any] = item;
+        });
+        return map;
+    }
+
+    public static mapToArray<T>(map: {[key: string]: T}): T[] {
+        return Object.keys(map).map(key => map[key]);
+    }
 }

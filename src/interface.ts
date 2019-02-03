@@ -32,3 +32,18 @@ export interface ISoukanjo {
     /** 残高 */
     zandaka: number;
 }
+
+export interface IShisan {
+    /** 順番 */
+    order: number;
+    /** 勘定科目 */
+    kamokuName: string;
+    /** 借方合計 */
+    totalKariPrice: number;
+    /** 貸方合計 */
+    totalKashiPrice: number;
+    /** 借方残高 */
+    kariZandaka: number;
+    /** 貸方残高 */
+    kashiZandaka: number;
+}

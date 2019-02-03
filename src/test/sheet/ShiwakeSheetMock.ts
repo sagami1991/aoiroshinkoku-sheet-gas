@@ -1,7 +1,7 @@
-import { IShiwakeRepository } from "repository/ShiwakeRepository";
+import { IShiwakeRepository as IShiwakeSheet } from "sheet/ShiwakeSheet";
 import { IShiwake } from "interface";
 
-export class ShiwakeRepositoryMock implements IShiwakeRepository {
+export class ShiwakeSheetMock implements IShiwakeSheet {
     constructor() {
     }
 
