@@ -5,7 +5,7 @@ import { SoukanjoSheet, ISoukanjoSheet } from "sheet/SoukanjoSheet";
 import { CommonUtils } from "CommonUtil";
 import { ShisanSheet, KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/ShisanSheet";
 
-/** 実行元 */
+/** 実行される関数 */
 global.main = () => {
     const shiwakeSheet = new ShiwakeSheet();
     const kamokuSheet = new KamokuSheet();
