@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "create": "clasp create blue-shinkoku-creater",
     "build": "webpack --watch --mode development",
     "push": "clasp push",
     "push:watch:win": "watch \"npm run push\" dist/",
