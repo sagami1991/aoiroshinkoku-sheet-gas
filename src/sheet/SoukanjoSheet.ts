@@ -1,5 +1,5 @@
 import { ISoukanjo } from "interface";
-import { AbstractSheet } from "./abstractSheet";
+import { AbstractSheet } from "./AbstractSheet";
 
 export interface ISoukanjoSheet {
     insertRecords(soukanjoRecords: ISoukanjo[]): void;

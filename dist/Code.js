@@ -1,4 +1,4 @@
-/** entrypoint */
+/** 実行される関数 */
 function main() {
 }/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -83,7 +83,7 @@ function main() {
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/main.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/Main.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -119,9 +119,9 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/commonUtil.ts":
+/***/ "./src/CommonUtil.ts":
 /*!***************************!*\
-  !*** ./src/commonUtil.ts ***!
+  !*** ./src/CommonUtil.ts ***!
   \***************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -175,9 +175,9 @@ exports.CommonUtils = CommonUtils;
 
 /***/ }),
 
-/***/ "./src/main.ts":
+/***/ "./src/Main.ts":
 /*!*********************!*\
-  !*** ./src/main.ts ***!
+  !*** ./src/Main.ts ***!
   \*********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -185,20 +185,20 @@ exports.CommonUtils = CommonUtils;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 exports.__esModule = true;
-var shiwakeSheet_1 = __webpack_require__(/*! sheet/shiwakeSheet */ "./src/sheet/shiwakeSheet.ts");
-var kamokuSheet_1 = __webpack_require__(/*! sheet/kamokuSheet */ "./src/sheet/kamokuSheet.ts");
-var soukanjoSheet_1 = __webpack_require__(/*! sheet/soukanjoSheet */ "./src/sheet/soukanjoSheet.ts");
-var commonUtil_1 = __webpack_require__(/*! commonUtil */ "./src/commonUtil.ts");
-var shisanSheet_1 = __webpack_require__(/*! sheet/shisanSheet */ "./src/sheet/shisanSheet.ts");
-/** entrypoint */
+var ShiwakeSheet_1 = __webpack_require__(/*! sheet/ShiwakeSheet */ "./src/sheet/ShiwakeSheet.ts");
+var KamokuSheet_1 = __webpack_require__(/*! sheet/KamokuSheet */ "./src/sheet/KamokuSheet.ts");
+var SoukanjoSheet_1 = __webpack_require__(/*! sheet/SoukanjoSheet */ "./src/sheet/SoukanjoSheet.ts");
+var CommonUtil_1 = __webpack_require__(/*! CommonUtil */ "./src/CommonUtil.ts");
+var ShisanSheet_1 = __webpack_require__(/*! sheet/ShisanSheet */ "./src/sheet/ShisanSheet.ts");
+/** 実行される関数 */
 global.main = function () {
-    var shiwakeSheet = new shiwakeSheet_1.ShiwakeSheet();
-    var kamokuSheet = new kamokuSheet_1.KamokuSheet();
-    var soukanjoSheet = new soukanjoSheet_1.SoukanjoSheet();
-    var shisanSheet = new shisanSheet_1.ShisanSheet();
-    var kashiKariTaishoSheet = new shisanSheet_1.KashiKariTaishoSheet();
-    var sonekiKeisanSheet = new shisanSheet_1.SonekiKeisanSheet();
-    var calculator = new ChoboCalculator(shiwakeSheet, kamokuSheet);
+    var shiwakeSheet = new ShiwakeSheet_1.ShiwakeSheet();
+    var kamokuSheet = new KamokuSheet_1.KamokuSheet();
+    var soukanjoSheet = new SoukanjoSheet_1.SoukanjoSheet();
+    var shisanSheet = new ShisanSheet_1.ShisanSheet();
+    var kashiKariTaishoSheet = new ShisanSheet_1.KashiKariTaishoSheet();
+    var sonekiKeisanSheet = new ShisanSheet_1.SonekiKeisanSheet();
+    var calculator = new Calculator(shiwakeSheet, kamokuSheet);
     var soukanjoRecords = calculator.calcSoukanjomotocho();
     var shisanRecords = calculator.calcShisan(soukanjoRecords);
     soukanjoSheet.insertRecords(soukanjoRecords);
@@ -207,16 +207,16 @@ global.main = function () {
     sonekiKeisanSheet.insertRecords(calculator.calcKessan(shisanRecords, "損益計算書"));
 };
 /** 帳簿計算 */
-var ChoboCalculator = /** @class */ (function () {
-    function ChoboCalculator(shiwakeSheet, kamokuSheet) {
+var Calculator = /** @class */ (function () {
+    function Calculator(shiwakeSheet, kamokuSheet) {
         this.shiwakeSheet = shiwakeSheet;
         this.kamokuSheet = kamokuSheet;
     }
     /** 総勘定元帳のレコード作成 */
-    ChoboCalculator.prototype.calcSoukanjomotocho = function () {
+    Calculator.prototype.calcSoukanjomotocho = function () {
         var shiwakeRecords = this.shiwakeSheet.getRecords();
         var kamokuRecords = this.kamokuSheet.getRecords();
-        var kamokuMap = commonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
+        var kamokuMap = CommonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
         var zandaka = {};
         for (var _i = 0, kamokuRecords_1 = kamokuRecords; _i < kamokuRecords_1.length; _i++) {
             var kamoku = kamokuRecords_1[_i];
@@ -260,7 +260,7 @@ var ChoboCalculator = /** @class */ (function () {
                 zandaka: zandaka[shiwake.kashiKamoku]
             });
         }
-        soukanjoRecords = commonUtil_1.CommonUtils.sortArray(soukanjoRecords, [
+        soukanjoRecords = CommonUtil_1.CommonUtils.sortArray(soukanjoRecords, [
             { keyName: "kamokuOrder", type: "ASC" },
             { keyName: "kamoku", type: "ASC" },
             { keyName: "date", type: "ASC" }
@@ -271,10 +271,10 @@ var ChoboCalculator = /** @class */ (function () {
         return soukanjoRecords;
     };
     /** 試算表の作成 */
-    ChoboCalculator.prototype.calcShisan = function (soukanjoRecords) {
+    Calculator.prototype.calcShisan = function (soukanjoRecords) {
         var shisanMap = {};
         var kamokuRecords = this.kamokuSheet.getRecords();
-        var kamokuMap = commonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
+        var kamokuMap = CommonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
         for (var _i = 0, kamokuRecords_2 = kamokuRecords; _i < kamokuRecords_2.length; _i++) {
             var kamoku = kamokuRecords_2[_i];
             shisanMap[kamoku.name] = {
@@ -302,29 +302,29 @@ var ChoboCalculator = /** @class */ (function () {
             shisan.kariZandaka += kariZandaka;
             shisan.kashiZandaka += kashiZandaka;
         }
-        var shisanRecords = commonUtil_1.CommonUtils.mapToArray(shisanMap);
-        shisanRecords = commonUtil_1.CommonUtils.sortArray(shisanRecords, [{
+        var shisanRecords = CommonUtil_1.CommonUtils.mapToArray(shisanMap);
+        shisanRecords = CommonUtil_1.CommonUtils.sortArray(shisanRecords, [{
                 keyName: "order", type: "ASC"
             }]);
         return shisanRecords;
     };
     /** 貸借対照表 or 損益計算書のレコード作成 */
-    ChoboCalculator.prototype.calcKessan = function (shisanRecords, seisanType) {
+    Calculator.prototype.calcKessan = function (shisanRecords, seisanType) {
         var kamokuRecords = this.kamokuSheet.getRecords();
-        var kamokuMap = commonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
+        var kamokuMap = CommonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
         return shisanRecords.filter(function (shisan) { return kamokuMap[shisan.kamokuName].seisanType === seisanType; });
     };
-    return ChoboCalculator;
+    return Calculator;
 }());
-exports.ChoboCalculator = ChoboCalculator;
+exports.Calculator = Calculator;
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
-/***/ "./src/sheet/abstractSheet.ts":
+/***/ "./src/sheet/AbstractSheet.ts":
 /*!************************************!*\
-  !*** ./src/sheet/abstractSheet.ts ***!
+  !*** ./src/sheet/AbstractSheet.ts ***!
   \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -345,9 +345,9 @@ exports.AbstractSheet = AbstractSheet;
 
 /***/ }),
 
-/***/ "./src/sheet/kamokuSheet.ts":
+/***/ "./src/sheet/KamokuSheet.ts":
 /*!**********************************!*\
-  !*** ./src/sheet/kamokuSheet.ts ***!
+  !*** ./src/sheet/KamokuSheet.ts ***!
   \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -426,9 +426,9 @@ exports.KamokuSheet = KamokuSheet;
 
 /***/ }),
 
-/***/ "./src/sheet/shisanSheet.ts":
+/***/ "./src/sheet/ShisanSheet.ts":
 /*!**********************************!*\
-  !*** ./src/sheet/shisanSheet.ts ***!
+  !*** ./src/sheet/ShisanSheet.ts ***!
   \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -449,7 +449,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var abstractSheet_1 = __webpack_require__(/*! ./abstractSheet */ "./src/sheet/abstractSheet.ts");
+var AbstractSheet_1 = __webpack_require__(/*! ./AbstractSheet */ "./src/sheet/AbstractSheet.ts");
 /** 試算表シートへの書き込みを行う */
 var ShisanSheet = /** @class */ (function (_super) {
     __extends(ShisanSheet, _super);
@@ -476,7 +476,7 @@ var ShisanSheet = /** @class */ (function (_super) {
     ShisanSheet.START_ROW_NUM = 3;
     ShisanSheet.COLUMN_LENGTH = 5;
     return ShisanSheet;
-}(abstractSheet_1.AbstractSheet));
+}(AbstractSheet_1.AbstractSheet));
 exports.ShisanSheet = ShisanSheet;
 /** 貸借対照表シートへの書き込みを行う */
 var KashiKariTaishoSheet = /** @class */ (function (_super) {
@@ -506,9 +506,9 @@ exports.SonekiKeisanSheet = SonekiKeisanSheet;
 
 /***/ }),
 
-/***/ "./src/sheet/shiwakeSheet.ts":
+/***/ "./src/sheet/ShiwakeSheet.ts":
 /*!***********************************!*\
-  !*** ./src/sheet/shiwakeSheet.ts ***!
+  !*** ./src/sheet/ShiwakeSheet.ts ***!
   \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -529,7 +529,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var abstractSheet_1 = __webpack_require__(/*! ./abstractSheet */ "./src/sheet/abstractSheet.ts");
+var AbstractSheet_1 = __webpack_require__(/*! ./AbstractSheet */ "./src/sheet/AbstractSheet.ts");
 /** 仕訳帳シートへの読み込みを行う */
 var ShiwakeSheet = /** @class */ (function (_super) {
     __extends(ShiwakeSheet, _super);
@@ -564,15 +564,15 @@ var ShiwakeSheet = /** @class */ (function (_super) {
         return shiwakeRecords;
     };
     return ShiwakeSheet;
-}(abstractSheet_1.AbstractSheet));
+}(AbstractSheet_1.AbstractSheet));
 exports.ShiwakeSheet = ShiwakeSheet;
 
 
 /***/ }),
 
-/***/ "./src/sheet/soukanjoSheet.ts":
+/***/ "./src/sheet/SoukanjoSheet.ts":
 /*!************************************!*\
-  !*** ./src/sheet/soukanjoSheet.ts ***!
+  !*** ./src/sheet/SoukanjoSheet.ts ***!
   \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -593,7 +593,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var abstractSheet_1 = __webpack_require__(/*! ./abstractSheet */ "./src/sheet/abstractSheet.ts");
+var AbstractSheet_1 = __webpack_require__(/*! ./AbstractSheet */ "./src/sheet/AbstractSheet.ts");
 /** 総勘定元帳シートへの書き込みを行う */
 var SoukanjoSheet = /** @class */ (function (_super) {
     __extends(SoukanjoSheet, _super);
@@ -636,7 +636,7 @@ var SoukanjoSheet = /** @class */ (function (_super) {
     };
     SoukanjoSheet.START_ROW_NUM = 2;
     return SoukanjoSheet;
-}(abstractSheet_1.AbstractSheet));
+}(AbstractSheet_1.AbstractSheet));
 exports.SoukanjoSheet = SoukanjoSheet;
 
 

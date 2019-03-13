@@ -1,5 +1,5 @@
 import { IShisan } from "interface";
-import { AbstractSheet } from "./abstractSheet";
+import { AbstractSheet } from "./AbstractSheet";
 
 export interface IShisanSheet {
     insertRecords(shisanRecords: IShisan[]): void;

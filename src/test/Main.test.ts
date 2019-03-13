@@ -1,8 +1,8 @@
-import { ChoboCalculator } from "main";
-import { ShiwakeSheetMock } from "./sheet/shiwakeSheetMock";
+import { Calculator } from "Main";
+import { ShiwakeSheetMock } from "./sheet/ShiwakeSheetMock";
 import { KamokuSheet } from "sheet/KamokuSheet";
 
-const testCalculator = new ChoboCalculator(
+const testCalculator = new Calculator(
     new ShiwakeSheetMock(),
     new KamokuSheet()
 );

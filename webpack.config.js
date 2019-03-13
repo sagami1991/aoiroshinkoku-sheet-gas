@@ -3,9 +3,9 @@ const es3ifyPlugin = require("es3ify-webpack-plugin");
 
 module.exports = {
     devtool: "none",
-    entry: "./src/main.ts",
+    entry: "./src/Main.ts",
     output: {
-        filename: "code.js",
+        filename: "Code.js",
         path: `${__dirname}/dist`,
     },
     resolve: {
