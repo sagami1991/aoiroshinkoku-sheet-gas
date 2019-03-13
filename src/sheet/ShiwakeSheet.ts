@@ -1,5 +1,5 @@
 import { IShiwake } from "interface";
-import { AbstractSheet } from "./abstractSheet";
+import { AbstractSheet } from "./AbstractSheet";
 export interface IShiwakeRepository {
     getRecords(): IShiwake[];
 }
