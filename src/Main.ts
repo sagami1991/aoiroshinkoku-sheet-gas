@@ -1,11 +1,11 @@
 import { IShiwake, ISoukanjo, IShisan } from "./interface";
-import { ShiwakeSheet, IShiwakeRepository as IShiwakeSheet } from "sheet/shiwakeSheet";
-import { KamokuSheet } from "sheet/kamokuSheet";
-import { SoukanjoSheet, ISoukanjoSheet } from "sheet/soukanjoSheet";
-import { CommonUtils } from "commonUtil";
-import { ShisanSheet, KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/shisanSheet";
+import { ShiwakeSheet, IShiwakeRepository as IShiwakeSheet } from "sheet/ShiwakeSheet";
+import { KamokuSheet } from "sheet/KamokuSheet";
+import { SoukanjoSheet, ISoukanjoSheet } from "sheet/SoukanjoSheet";
+import { CommonUtils } from "CommonUtil";
+import { ShisanSheet, KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/ShisanSheet";
 
-/** entrypoint */
+/** 実行される関数 */
 global.main = () => {
     const shiwakeSheet = new ShiwakeSheet();
     const kamokuSheet = new KamokuSheet();
@@ -14,7 +14,7 @@ global.main = () => {
     const kashiKariTaishoSheet = new KashiKariTaishoSheet();
     const sonekiKeisanSheet = new SonekiKeisanSheet();
 
-    const calculator = new ChoboCalculator(shiwakeSheet, kamokuSheet);
+    const calculator = new Calculator(shiwakeSheet, kamokuSheet);
     const soukanjoRecords = calculator.calcSoukanjomotocho();
     const shisanRecords = calculator.calcShisan(soukanjoRecords);
 
@@ -25,7 +25,7 @@ global.main = () => {
 };
 
 /** 帳簿計算 */
-export class ChoboCalculator {
+export class Calculator {
     public constructor(
         private shiwakeSheet: IShiwakeSheet,
         private kamokuSheet: KamokuSheet,
