@@ -1,16 +1,15 @@
-import { IShiwake, ISoukanjo, IShisan } from "./interface";
+import { ISoukanjo, IShisan } from "./interface";
 import { ShiwakeSheet, IShiwakeRepository as IShiwakeSheet } from "sheet/shiwakeSheet";
 import { KamokuSheet } from "sheet/kamokuSheet";
-import { SoukanjoSheet, ISoukanjoSheet } from "sheet/soukanjoSheet";
+import { SoukanjoSheet } from "sheet/soukanjoSheet";
 import { CommonUtils } from "commonUtil";
-import { ShisanSheet, KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/shisanSheet";
+import { KashiKariTaishoSheet, SonekiKeisanSheet } from "sheet/shisanSheet";
 
 /** entrypoint */
 global.main = () => {
     const shiwakeSheet = new ShiwakeSheet();
     const kamokuSheet = new KamokuSheet();
     const soukanjoSheet = new SoukanjoSheet();
-    const shisanSheet = new ShisanSheet();
     const kashiKariTaishoSheet = new KashiKariTaishoSheet();
     const sonekiKeisanSheet = new SonekiKeisanSheet();
 
@@ -19,7 +18,6 @@ global.main = () => {
     const shisanRecords = calculator.calcShisan(soukanjoRecords);
 
     soukanjoSheet.insertRecords(soukanjoRecords);
-    shisanSheet.insertRecords(shisanRecords);
     kashiKariTaishoSheet.insertRecords(calculator.calcKessan(shisanRecords, "貸借対照表"));
     sonekiKeisanSheet.insertRecords(calculator.calcKessan(shisanRecords, "損益計算書"));
 };

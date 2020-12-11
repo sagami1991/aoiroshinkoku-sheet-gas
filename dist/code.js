@@ -195,14 +195,12 @@ global.main = function () {
     var shiwakeSheet = new shiwakeSheet_1.ShiwakeSheet();
     var kamokuSheet = new kamokuSheet_1.KamokuSheet();
     var soukanjoSheet = new soukanjoSheet_1.SoukanjoSheet();
-    var shisanSheet = new shisanSheet_1.ShisanSheet();
     var kashiKariTaishoSheet = new shisanSheet_1.KashiKariTaishoSheet();
     var sonekiKeisanSheet = new shisanSheet_1.SonekiKeisanSheet();
     var calculator = new ChoboCalculator(shiwakeSheet, kamokuSheet);
     var soukanjoRecords = calculator.calcSoukanjomotocho();
     var shisanRecords = calculator.calcShisan(soukanjoRecords);
     soukanjoSheet.insertRecords(soukanjoRecords);
-    shisanSheet.insertRecords(shisanRecords);
     kashiKariTaishoSheet.insertRecords(calculator.calcKessan(shisanRecords, "貸借対照表"));
     sonekiKeisanSheet.insertRecords(calculator.calcKessan(shisanRecords, "損益計算書"));
 };
