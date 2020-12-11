@@ -215,6 +215,9 @@ var ChoboCalculator = /** @class */ (function () {
     /** 総勘定元帳のレコード作成 */
     ChoboCalculator.prototype.calcSoukanjomotocho = function () {
         var shiwakeRecords = this.shiwakeSheet.getRecords();
+        shiwakeRecords = commonUtil_1.CommonUtils.sortArray(shiwakeRecords, [
+            { keyName: "date", type: "ASC" }
+        ]);
         var kamokuRecords = this.kamokuSheet.getRecords();
         var kamokuMap = commonUtil_1.CommonUtils.arrayToMap(kamokuRecords, "name");
         var zandaka = {};
@@ -354,73 +357,48 @@ exports.AbstractSheet = AbstractSheet;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
+var abstractSheet_1 = __webpack_require__(/*! ./abstractSheet */ "./src/sheet/abstractSheet.ts");
 /** 科目マスタシートへの読み込みを行う */
-var KamokuSheet = /** @class */ (function () {
+var KamokuSheet = /** @class */ (function (_super) {
+    __extends(KamokuSheet, _super);
     function KamokuSheet() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    KamokuSheet.prototype.getSheetName = function () {
+        return "科目マスタ";
+    };
     KamokuSheet.prototype.getRecords = function () {
-        return [
-            {
-                outputOrder: 2,
-                name: "事業主借",
-                kashikariType: "貸方",
-                seisanType: "貸借対照表"
-            }, {
-                outputOrder: 0,
-                name: "普通預金",
-                kashikariType: "借方",
-                seisanType: "貸借対照表"
-            }, {
-                outputOrder: 1,
-                name: "売上",
-                kashikariType: "貸方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 2,
-                name: "事業主貸",
-                kashikariType: "借方",
-                seisanType: "貸借対照表"
-            }, {
-                outputOrder: 1,
-                name: "売掛金",
-                kashikariType: "借方",
-                seisanType: "貸借対照表"
-            }, {
-                outputOrder: 5,
-                name: "旅費交通費",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 3,
-                name: "地代家賃",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 3,
-                name: "水道光熱費",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 3,
-                name: "通信費",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 4,
-                name: "消耗品費",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }, {
-                outputOrder: 4,
-                name: "接待交際費",
-                kashikariType: "借方",
-                seisanType: "損益計算書"
-            }
-        ];
+        var values = this.sheet.getRange("A:G").getValues();
+        var kamokuRecords = [];
+        values.shift();
+        for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
+            var row = values_1[_i];
+            var kamoku = {
+                outputOrder: row[2],
+                name: row[0],
+                kashikariType: row[1],
+                seisanType: row[3]
+            };
+            kamokuRecords.push(kamoku);
+        }
+        return kamokuRecords;
     };
     return KamokuSheet;
-}());
+}(abstractSheet_1.AbstractSheet));
 exports.KamokuSheet = KamokuSheet;
 
 
