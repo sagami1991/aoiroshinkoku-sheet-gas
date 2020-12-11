@@ -34,7 +34,10 @@ export class ChoboCalculator {
 
     /** 総勘定元帳のレコード作成 */
     public calcSoukanjomotocho(): ISoukanjo[] {
-        const shiwakeRecords = this.shiwakeSheet.getRecords();
+        let shiwakeRecords = this.shiwakeSheet.getRecords();
+        shiwakeRecords = CommonUtils.sortArray(shiwakeRecords, [
+            { keyName: "date", type: "ASC" },
+        ]);
         const kamokuRecords = this.kamokuSheet.getRecords();
         const kamokuMap = CommonUtils.arrayToMap(kamokuRecords, "name");
         const zandaka: { [kamoku: string]: number } = {};
