@@ -1,4 +1,3 @@
-
 /** 科目マスタ */
 export interface IKamoku {
     /** 総勘定元帳の出力順 */

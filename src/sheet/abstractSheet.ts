@@ -1,5 +1,4 @@
-
-/** シートの読み書きを行う規定クラス */
+/** シートの読み書きを行う基底クラス */
 export abstract class AbstractSheet {
     protected sheet: GoogleAppsScript.Spreadsheet.Sheet;
     protected abstract getSheetName(): string;

@@ -334,7 +334,7 @@ exports.ChoboCalculator = ChoboCalculator;
 "use strict";
 
 exports.__esModule = true;
-/** シートの読み書きを行う規定クラス */
+/** シートの読み書きを行う基底クラス */
 var AbstractSheet = /** @class */ (function () {
     function AbstractSheet() {
         var spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
