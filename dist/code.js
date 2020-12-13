@@ -528,10 +528,10 @@ var ShiwakeSheet = /** @class */ (function (_super) {
         var rowIndex = ShiwakeSheet.START_ROW_NUM;
         for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
             var row = values_1[_i];
-            rowIndex++;
             if (!row[0]) {
                 break;
             }
+            rowIndex++;
             var shiwake = {
                 id: 0,
                 date: row[0],
@@ -542,7 +542,13 @@ var ShiwakeSheet = /** @class */ (function (_super) {
                 summary: row[5]
             };
             if (!(shiwake.date instanceof Date)) {
-                throw new Error("\u65E5\u4ED8\u304C\u4E0D\u6B63\u3067\u3059\u3002\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8 " + rowIndex + "\u884C\u76EEA\u5217");
+                throw new Error("\u65E5\u4ED8\u304C\u65E5\u4ED8\u5F62\u5F0F\u3067\u5165\u529B\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8 " + rowIndex + "\u884C\u76EEA\u5217");
+            }
+            if (typeof shiwake.kariPrice !== "number") {
+                throw new Error("\u501F\u65B9\u91D1\u984D\u304C\u6570\u5B57\u3067\u5165\u529B\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8 " + rowIndex + "\u884C\u76EEC\u5217");
+            }
+            if (typeof shiwake.kashiPrice !== "number") {
+                throw new Error("\u8CB8\u65B9\u91D1\u984D\u304C\u6570\u5B57\u3067\u5165\u529B\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8 " + rowIndex + "\u884C\u76EEE\u5217");
             }
             shiwakeRecords.push(shiwake);
         }

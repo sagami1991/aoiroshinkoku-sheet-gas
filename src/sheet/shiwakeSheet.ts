@@ -20,10 +20,10 @@ export class ShiwakeSheet extends AbstractSheet implements IShiwakeRepository {
         }
         let rowIndex = ShiwakeSheet.START_ROW_NUM;
         for (const row of values) {
-            rowIndex++
             if (!row[0]) {
                 break;
             }
+            rowIndex++
             const shiwake: IShiwake = {
                 id: 0,
                 date: row[0] as Date,
@@ -34,7 +34,13 @@ export class ShiwakeSheet extends AbstractSheet implements IShiwakeRepository {
                 summary: row[5] as string
             };
             if (!(shiwake.date instanceof Date)) {
-                throw new Error(`日付が不正です。仕訳帳シート ${rowIndex}行目A列`)
+                throw new Error(`日付が日付形式で入力されていません。仕訳帳シート ${rowIndex}行目A列`)
+            }
+            if (typeof shiwake.kariPrice !== "number") {
+                throw new Error(`借方金額が数字で入力されていません。仕訳帳シート ${rowIndex}行目C列`)
+            }
+            if (typeof shiwake.kashiPrice !== "number") {
+                throw new Error(`貸方金額が数字で入力されていません。仕訳帳シート ${rowIndex}行目E列`)
             }
             shiwakeRecords.push(shiwake);
         }
