@@ -20,6 +20,8 @@ global.main = () => {
     soukanjoSheet.insertRecords(soukanjoRecords);
     kashiKariTaishoSheet.insertRecords(calculator.calcKessan(shisanRecords, "貸借対照表"));
     sonekiKeisanSheet.insertRecords(calculator.calcKessan(shisanRecords, "損益計算書"));
+
+    Browser.msgBox("シート「総勘定元帳」「損益計算書」「貸借対照表」の作成が完了しました！")
 };
 
 /** 帳簿計算 */

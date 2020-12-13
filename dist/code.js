@@ -203,6 +203,7 @@ global.main = function () {
     soukanjoSheet.insertRecords(soukanjoRecords);
     kashiKariTaishoSheet.insertRecords(calculator.calcKessan(shisanRecords, "貸借対照表"));
     sonekiKeisanSheet.insertRecords(calculator.calcKessan(shisanRecords, "損益計算書"));
+    Browser.msgBox("シート「総勘定元帳」「損益計算書」「貸借対照表」の作成が完了しました！");
 };
 /** 帳簿計算 */
 var ChoboCalculator = /** @class */ (function () {
@@ -436,7 +437,10 @@ var ShisanSheet = /** @class */ (function (_super) {
         return "試算表";
     };
     ShisanSheet.prototype.insertRecords = function (shisanRecords) {
-        var rows = shisanRecords.map(function (shisan) {
+        var rows = [];
+        var header = ["勘定科目", "借方金額", "貸方金額", "借方残高", "貸方残高"];
+        rows.push(header);
+        rows.push.apply(rows, shisanRecords.map(function (shisan) {
             return [
                 shisan.kamokuName,
                 shisan.totalKariPrice,
@@ -444,12 +448,12 @@ var ShisanSheet = /** @class */ (function (_super) {
                 shisan.kariZandaka,
                 shisan.kashiZandaka
             ];
-        });
+        }));
         this.sheet.getRange(ShisanSheet.START_ROW_NUM, 1, 1000, ShisanSheet.COLUMN_LENGTH).clearContent();
         var range = this.sheet.getRange(ShisanSheet.START_ROW_NUM, 1, rows.length, ShisanSheet.COLUMN_LENGTH);
         range.setValues(rows);
     };
-    ShisanSheet.START_ROW_NUM = 3;
+    ShisanSheet.START_ROW_NUM = 1;
     ShisanSheet.COLUMN_LENGTH = 5;
     return ShisanSheet;
 }(abstractSheet_1.AbstractSheet));
@@ -518,27 +522,38 @@ var ShiwakeSheet = /** @class */ (function (_super) {
     ShiwakeSheet.prototype.getRecords = function () {
         var values = this.sheet.getRange("A:G").getValues();
         var shiwakeRecords = [];
-        values.shift();
-        values.shift();
+        for (var i = 0; i < ShiwakeSheet.START_ROW_NUM; i++) {
+            values.shift();
+        }
+        var rowIndex = ShiwakeSheet.START_ROW_NUM;
         for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
             var row = values_1[_i];
-            if (row[0] === undefined || row[0] === null || row[0] === "") {
-                continue;
+            rowIndex++;
+            if (!row[0]) {
+                break;
             }
             var shiwake = {
-                id: row[0],
-                date: row[1],
-                kariKamoku: row[2],
-                kariPrice: row[3],
-                kashiKamoku: row[4],
-                kashiPrice: row[5],
-                summary: row[6]
+                id: 0,
+                date: row[0],
+                kariKamoku: row[1],
+                kariPrice: row[2],
+                kashiKamoku: row[3],
+                kashiPrice: row[4],
+                summary: row[5]
             };
+            if (!(shiwake.date instanceof Date)) {
+                throw new Error("\u65E5\u4ED8\u304C\u4E0D\u6B63\u3067\u3059\u3002\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8 " + rowIndex + "\u884C\u76EEA\u5217");
+            }
             shiwakeRecords.push(shiwake);
+        }
+        var result = Browser.msgBox("\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8\u3092 " + rowIndex + " \u884C\u76EE\u307E\u3067\u8AAD\u307F\u8FBC\u307F\u307E\u3057\u305F\u3002\\n\u4EE5\u4E0B\u306E\u30B7\u30FC\u30C8\u3092\u4E0A\u66F8\u304D\u3057\u4F5C\u6210\u3057\u3066\u3088\u308D\u3057\u3044\u3067\u3057\u3087\u3046\u304B\u3002\\n\u30FB\u300C\u7DCF\u52D8\u5B9A\u5143\u5E33\u300D\\n\u30FB\u300C\u640D\u76CA\u8A08\u7B97\u66F8\u300D\\n\u30FB\u300C\u8CB8\u501F\u5BFE\u7167\u8868\u300D", Browser.Buttons.OK_CANCEL);
+        if (result === 'cancel') {
+            throw new Error('キャンセルされました');
         }
         console.log("\u4ED5\u8A33\u5E33\u30B7\u30FC\u30C8\u304B\u3089 " + shiwakeRecords.length + " \u884C\u8AAD\u307F\u8FBC\u307F\u307E\u3057\u305F");
         return shiwakeRecords;
     };
+    ShiwakeSheet.START_ROW_NUM = 2;
     return ShiwakeSheet;
 }(abstractSheet_1.AbstractSheet));
 exports.ShiwakeSheet = ShiwakeSheet;
@@ -580,7 +595,7 @@ var SoukanjoSheet = /** @class */ (function (_super) {
         return "総勘定元帳";
     };
     SoukanjoSheet.prototype.insertRecords = function (soukanjoRecords) {
-        var header = ["仕訳帳ID", "日付", "勘定科目", "相手勘定科目", "摘要", "借方金額（円）", "貸方金額（円）", "残高（円）"];
+        var header = ["日付", "勘定科目", "相手勘定科目", "摘要", "借方金額（円）", "貸方金額（円）", "残高（円）"];
         var beforeKamokuName = "";
         var rows = [];
         for (var _i = 0, soukanjoRecords_1 = soukanjoRecords; _i < soukanjoRecords_1.length; _i++) {
@@ -588,13 +603,12 @@ var SoukanjoSheet = /** @class */ (function (_super) {
             if (soukanjo.kamoku !== beforeKamokuName) {
                 beforeKamokuName = soukanjo.kamoku;
                 if (rows.length !== 0) {
-                    rows.push(["", "", "", "", "", "", "", ""]); // 空行の追加
+                    rows.push(["", "", "", "", "", "", ""]); // 空行の追加
                 }
-                rows.push(["\u52D8\u5B9A\u79D1\u76EE\u540D: " + soukanjo.kamoku, "", "", "", "", "", "", ""]);
+                rows.push(["\u52D8\u5B9A\u79D1\u76EE\u540D: " + soukanjo.kamoku, "", "", "", "", "", ""]);
                 rows.push(header);
             }
             var row = [
-                soukanjo.shiwakeId,
                 soukanjo.date,
                 soukanjo.kamoku,
                 soukanjo.aiteKamoku,
@@ -610,7 +624,7 @@ var SoukanjoSheet = /** @class */ (function (_super) {
         range.setValues(rows);
         console.log("\u7DCF\u52D8\u5B9A\u5143\u5E33\u30B7\u30FC\u30C8\u306B" + soukanjoRecords.length + "\u884C\u66F8\u304D\u8FBC\u307F\u307E\u3057\u305F");
     };
-    SoukanjoSheet.START_ROW_NUM = 2;
+    SoukanjoSheet.START_ROW_NUM = 1;
     return SoukanjoSheet;
 }(abstractSheet_1.AbstractSheet));
 exports.SoukanjoSheet = SoukanjoSheet;

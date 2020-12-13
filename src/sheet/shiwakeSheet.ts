@@ -6,6 +6,7 @@ export interface IShiwakeRepository {
 
 /** 仕訳帳シートへの読み込みを行う */
 export class ShiwakeSheet extends AbstractSheet implements IShiwakeRepository {
+    private static START_ROW_NUM = 2;
 
     protected getSheetName() {
         return "仕訳帳";
@@ -14,22 +15,32 @@ export class ShiwakeSheet extends AbstractSheet implements IShiwakeRepository {
     public getRecords() {
         const values = this.sheet.getRange("A:G").getValues();
         const shiwakeRecords: IShiwake[] = [];
-        values.shift();
-        values.shift();
+        for (let i = 0; i < ShiwakeSheet.START_ROW_NUM; i++) {
+            values.shift();
+        }
+        let rowIndex = ShiwakeSheet.START_ROW_NUM;
         for (const row of values) {
-            if (row[0] === undefined || row[0] === null || row[0] === "") {
-                continue;
+            rowIndex++
+            if (!row[0]) {
+                break;
             }
             const shiwake: IShiwake = {
-                id: row[0] as number,
-                date: row[1] as Date,
-                kariKamoku: row[2] as string,
-                kariPrice: row[3] as number,
-                kashiKamoku: row[4] as string,
-                kashiPrice: row[5] as number,
-                summary: row[6] as string
+                id: 0,
+                date: row[0] as Date,
+                kariKamoku: row[1] as string,
+                kariPrice: row[2] as number,
+                kashiKamoku: row[3] as string,
+                kashiPrice: row[4] as number,
+                summary: row[5] as string
             };
+            if (!(shiwake.date instanceof Date)) {
+                throw new Error(`日付が不正です。仕訳帳シート ${rowIndex}行目A列`)
+            }
             shiwakeRecords.push(shiwake);
+        }
+        const result = Browser.msgBox(`仕訳帳シートを ${rowIndex} 行目まで読み込みました。\\n以下のシートを上書きし作成してよろしいでしょうか。\\n・「総勘定元帳」\\n・「損益計算書」\\n・「貸借対照表」`, Browser.Buttons.OK_CANCEL)
+        if (result === 'cancel') {
+            throw new Error('キャンセルされました');
         }
         console.log(`仕訳帳シートから ${shiwakeRecords.length} 行読み込みました`);
         return shiwakeRecords;
